@@ -11,3 +11,6 @@
 # X iOS App 启用 api.x.com / api.twitter.com MITM 后会导致内容加载失败。
 # 保守起见，默认模块不启用任何拦截规则。
 # 如需继续测试，请先确认 X App 在开启 Shadowrocket 证书 MITM 时不会触发证书固定。
+
+[Rule]
+DOMAIN,x-adblock-module-disabled.invalid,DIRECT
