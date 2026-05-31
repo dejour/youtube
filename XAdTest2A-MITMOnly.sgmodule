@@ -1,0 +1,13 @@
+#!name = X去广告测试2A-仅MITM
+
+#!desc = 仅启用 X/Twitter API HTTPS MITM，不拦截、不改写，用于确认 iOS 是否触发证书固定
+
+#!author = dejour
+
+#!homepage=https://yfamilys.com
+
+#!icon = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
+
+
+[MITM]
+hostname = %APPEND% api.x.com,api.twitter.com,x.com,twitter.com
