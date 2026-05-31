@@ -1,6 +1,6 @@
 #!name = X去广告测试2-广告日志
 
-#!desc = 仅拦截 promoted_content 日志接口，不启用 MITM 脚本
+#!desc = 不启用 MITM，避免 X iOS 证书固定导致加载失败；HTTPS 日志改写可能不会生效
 
 #!author = dejour
 
@@ -11,6 +11,3 @@
 
 [URL Rewrite]
 ^https:\/\/(api\.x\.com|api\.twitter\.com|x\.com|twitter\.com)\/(i\/api\/)?1\.1\/promoted_content\/log\.json _ reject-200
-
-[MITM]
-hostname = %APPEND% api.x.com,api.twitter.com,x.com,twitter.com
