@@ -1,0 +1,16 @@
+#!name = X去广告测试2-广告日志
+
+#!desc = 仅拦截 promoted_content 日志接口，不启用 MITM 脚本
+
+#!author = dejour
+
+#!homepage=https://yfamilys.com
+
+#!icon = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
+
+
+[URL Rewrite]
+^https:\/\/(api\.x\.com|api\.twitter\.com|x\.com|twitter\.com)\/(i\/api\/)?1\.1\/promoted_content\/log\.json _ reject-200
+
+[MITM]
+hostname = %APPEND% api.x.com,api.twitter.com,x.com,twitter.com

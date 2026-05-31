@@ -1,0 +1,14 @@
+#!name = X去广告测试1-禁UDP
+
+#!desc = 仅禁用 X/Twitter UDP/QUIC，用于测试 X iOS 是否能正常回落到 TCP
+
+#!author = dejour
+
+#!homepage=https://yfamilys.com
+
+#!icon = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
+
+
+[Rule]
+AND,((DOMAIN-SUFFIX,x.com), (PROTOCOL,UDP)),REJECT
+AND,((DOMAIN-SUFFIX,twitter.com), (PROTOCOL,UDP)),REJECT
