@@ -1,6 +1,6 @@
 #!name = X去广告
 
-#!desc = 屏蔽 X iOS 信息流广告、Promoted 内容和部分广告日志
+#!desc = X iOS 当前疑似证书固定，默认禁用 MITM 规则以避免加载失败
 
 #!author = dejour
 
@@ -8,18 +8,6 @@
 
 #!icon = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Twitter.png
 
-
-[Rule]
-AND,((DOMAIN-SUFFIX,x.com), (PROTOCOL,UDP)),REJECT
-AND,((DOMAIN-SUFFIX,twitter.com), (PROTOCOL,UDP)),REJECT
-AND,((DOMAIN-SUFFIX,api.x.com), (PROTOCOL,UDP)),REJECT
-AND,((DOMAIN-SUFFIX,api.twitter.com), (PROTOCOL,UDP)),REJECT
-
-[URL Rewrite]
-^https:\/\/(api\.x\.com|api\.twitter\.com|x\.com|twitter\.com)\/(i\/api\/)?1\.1\/promoted_content\/log\.json _ reject-200
-
-[Script]
-x.response = type=http-response,pattern=^https:\/\/(api\.x\.com|api\.twitter\.com|x\.com|twitter\.com)\/(i\/api\/)?graphql\/[^\/]+\/(HomeTimeline|HomeLatestTimeline|SearchTimeline|ExplorePage|ExploreSidebar|UserTweets|UserTweetsAndReplies|UserMedia|GenericTimelineById|ListLatestTweetsTimeline|ListRankedTweetsTimeline|CommunityTweetsTimeline|UserPromotedTweets),requires-body=1,max-size=-1,script-path=https://raw.githubusercontent.com/dejour/youtube/main/x.response.js
-
-[MITM]
-hostname = %APPEND% api.x.com,api.twitter.com,x.com,*.x.com,twitter.com,*.twitter.com
+# X iOS App 启用 api.x.com / api.twitter.com MITM 后会导致内容加载失败。
+# 保守起见，默认模块不启用任何拦截规则。
+# 如需继续测试，请先确认 X App 在开启 Shadowrocket 证书 MITM 时不会触发证书固定。
