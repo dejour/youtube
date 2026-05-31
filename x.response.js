@@ -1,15 +1,15 @@
 const body = $response.body || "";
 
 const adKeyRe = /^(promotedMetadata|promotedContent|promoted_content|promotedTrend|promoted_trend|adMetadata|ad_metadata|advertiserInfo|advertiser_info)$/i;
-const timelineArrayKeyRe = /^(entries|items|moduleItems|timelineItems|modules|tweets|results)$/i;
+const timelineArrayKeyRe = /^(entries|items|moduleItems|timelineItems)$/i;
 const promotedEntryRe = /(^|[-_:])(promoted|advertised|ad)([-_:]|$)/i;
 
 function isObject(value) {
   return value !== null && typeof value === "object";
 }
 
-function hasAdMarker(value, depth = 0) {
-  if (!isObject(value) || depth > 10) return false;
+function hasAdMarker(value, depth) {
+  if (!isObject(value) || depth > 8) return false;
 
   for (const key of Object.keys(value)) {
     const child = value[key];
@@ -38,27 +38,29 @@ function hasAdMarker(value, depth = 0) {
   return false;
 }
 
-function clean(value, key = "") {
+function prune(value, key, depth) {
+  if (!isObject(value) || depth > 60) return;
+
   if (Array.isArray(value)) {
-    const cleaned = value.map((item) => clean(item, key));
-    return timelineArrayKeyRe.test(key)
-      ? cleaned.filter((item) => !hasAdMarker(item))
-      : cleaned;
+    for (const item of value) prune(item, key, depth + 1);
+
+    if (timelineArrayKeyRe.test(key)) {
+      for (let index = value.length - 1; index >= 0; index--) {
+        if (hasAdMarker(value[index], 0)) value.splice(index, 1);
+      }
+    }
+    return;
   }
 
-  if (!isObject(value)) return value;
-
-  const output = {};
   for (const childKey of Object.keys(value)) {
-    if (adKeyRe.test(childKey)) continue;
-    output[childKey] = clean(value[childKey], childKey);
+    prune(value[childKey], childKey, depth + 1);
   }
-  return output;
 }
 
 try {
   const json = JSON.parse(body);
-  $done({ body: JSON.stringify(clean(json)) });
+  prune(json, "", 0);
+  $done({ body: JSON.stringify(json) });
 } catch (error) {
   $done({ body });
 }
